@@ -3,7 +3,9 @@ const faker = require('faker');
 
 const app = express();
 const PORT = 3000;
+const cors = require('cors');
 
+app.use(cors())
 // Generate fake data
 const generateData = (count, seed) => {
     faker.seed(seed);
