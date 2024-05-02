@@ -2,8 +2,8 @@ const faker = require('faker');
 
 const getUsers=(req, res) => {
     const page = parseInt(req.query.page) || 1;
-    const pageSize = page === 1 ? 20 : 10;
-    const startIndex = page === 2 ? (page + 1) * pageSize : (page - 1) * pageSize;
+    const pageSize =  20;
+    const startIndex =  (page - 1) * pageSize;
     const seed = req.query.seed ? parseInt(req.query.seed) + page : page;
     const region = req.query.region;
     let locale;
