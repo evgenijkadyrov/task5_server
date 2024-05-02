@@ -1,9 +1,11 @@
 const faker = require('faker');
+const {generateErrorDataRecords} = require("../services/errors");
 
-const getUsers=(req, res) => {
+const getUsers=async (req, res) => {
     const page = parseInt(req.query.page) || 1;
-    const pageSize =  20;
-    const startIndex =  (page - 1) * pageSize;
+    const errorRate=req.query.errorRate
+    const pageSize = 20;
+    const startIndex = (page - 1) * pageSize;
     const seed = req.query.seed ? parseInt(req.query.seed) + page : page;
     const region = req.query.region;
     let locale;
@@ -24,7 +26,8 @@ const getUsers=(req, res) => {
         record.counter = startIndex + index + 1;
         return record;
     });
-    res.json(data);
+    const errorData =  generateErrorDataRecords(data, errorRate)
+    res.json(errorData);
 
 }
 const generateData = (count, seed, locale) => {
