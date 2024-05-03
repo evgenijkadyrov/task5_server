@@ -6,7 +6,7 @@ const getUsers=async (req, res) => {
     const errorRate=req.query.errorRate
     const pageSize = 20;
     const startIndex = (page - 1) * pageSize;
-    const seed = req.query.seed ? req.query.seed + page : page;
+    const seedValue = req.query.seed ? req.query.seed + page : page;
     const region = req.query.region;
     let locale;
     switch (region) {
@@ -22,7 +22,7 @@ const getUsers=async (req, res) => {
         default:
             locale = 'en';
     }
-    const data = generateData(pageSize, seed, locale).map((record, index) => {
+    const data = generateData(pageSize, seedValue, locale).map((record, index) => {
         record.counter = startIndex + index + 1;
         return record;
     });
@@ -30,9 +30,9 @@ const getUsers=async (req, res) => {
     res.json(errorData);
 
 }
-const generateData = (count, seed, locale) => {
+const generateData = (count, seedValue, locale) => {
     faker.setLocale(locale);
-    faker.seed(seed);
+    faker.seed(seedValue);
     const data = [];
     for (let i = 0; i < count; i++) {
         const record = {
