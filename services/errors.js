@@ -1,6 +1,6 @@
-
 const seedrandom = require('seedrandom');
 const rng= seedrandom('hello')
+
 const ErrorType = {
      "DeleteCharacter":0 ,
     "AddCharacter":1,
