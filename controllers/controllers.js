@@ -6,7 +6,7 @@ const getUsers=async (req, res) => {
     const errorRate=req.query.errorRate
     const pageSize = 20;
     const startIndex = (page - 1) * pageSize;
-    const seedValue = req.query.seed ? req.query.seed + page : page;
+    const seedValue = req.query.seedValue ? parseInt(req.query.seedValue) + page : page;
     const region = req.query.region;
     let locale;
     switch (region) {
