@@ -1,10 +1,10 @@
 const seedrandom = require('seedrandom');
-const rng= seedrandom('hello')
+const rng = seedrandom('hello')
 
 const ErrorType = {
-     "DeleteCharacter":0 ,
-    "AddCharacter":1,
-    "SwapCharacters":2,
+    "DeleteCharacter": 0,
+    "AddCharacter": 1,
+    "SwapCharacters": 2,
 };
 
 const alphabetUSA = 'abcdefghijklmnopqrstuvwxyz';
@@ -21,6 +21,7 @@ function getAlphabetByRegion(region) {
     }
     return alphabetUSA;
 }
+
 const getRandomCharacter = (characters) => {
     const index = Math.floor(rng() * characters.length);
     return characters[index];
@@ -29,6 +30,7 @@ const getRandomCharacter = (characters) => {
 const applyError = (data, errorType, region) => {
     const position = Math.floor(rng() * (data.length + 1));
     let newData = data;
+
     if (typeof data === 'string') {
         switch (errorType) {
             case ErrorType.DeleteCharacter:
@@ -49,6 +51,17 @@ const applyError = (data, errorType, region) => {
                 break;
         }
     }
+
+    if (newData.length < 10) {
+        const missingCharacters = 10 - newData.length;
+        for (let i = 0; i < missingCharacters; i++) {
+            const newCharacter = getRandomCharacter(getAlphabetByRegion(region));
+            newData += newCharacter;
+        }
+    } else if (newData.length > 20) {
+        newData = newData.slice(0, 20);
+    }
+
     return newData;
 };
 
@@ -77,14 +90,23 @@ const applyDigitsError = (value) => {
 const applyAddCharacterError = (value) => {
     const digits = '0123456789';
     const randomDigit = digits[Math.floor(rng() * digits.length)];
-    return value + randomDigit;
+    let randomPosition = Math.floor(rng() * (value.length + 1));
+
+    if (value.length < 9) {
+
+        return value.slice(0, randomPosition) + randomDigit + value.slice(randomPosition);
+    }
+
+    return value;
 };
 
 const applyDeleteCharacterError = (value) => {
-    if (value.length > 0) {
-        return value.substring(0, value.length - 1);
+    if (value?.length > 8) {
+        let randomPosition = Math.floor(rng() * value.length);
+
+        return value.slice(0, randomPosition) + value.slice(randomPosition + 1);
     }
-    return value;
+    return value
 };
 
 const generateErrorCount = (errorRate) => {
@@ -98,9 +120,9 @@ const generateErrorCount = (errorRate) => {
     return errorCount;
 };
 
-const generateErrorDataRecord = (originalData, errorRate,region) => {
+const generateErrorDataRecord = (originalData, errorRate, region) => {
     const errorCount = generateErrorCount(errorRate);
-    let modifiedData = { ...originalData };
+    let modifiedData = {...originalData};
 
     const fields = ['name', 'address', 'phoneNumber'];
     const shuffledFields = shuffleArray(fields);
@@ -133,7 +155,7 @@ const shuffleArray = (array) => {
     return newArray;
 };
 
- const generateErrorDataRecords = (originalData, errorRate, region) => {
+const generateErrorDataRecords = (originalData, errorRate, region) => {
     if (originalData) {
         return originalData.map((record) =>
             generateErrorDataRecord(record, errorRate, region)
