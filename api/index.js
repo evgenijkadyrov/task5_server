@@ -5,7 +5,11 @@ const routes = require('../routes/routes');
 const app = express();
 const PORT = 3000;
 
-app.use(cors());
+app.use(cors({
+    origin: "https://task5-client-gules.vercel.app"
+}));
+app.use(express.json())
+app.use(express.urlencoded({extended: true}))
 app.use('/', routes);
 
 // Start the server
